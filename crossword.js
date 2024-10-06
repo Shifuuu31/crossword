@@ -91,7 +91,7 @@ function canPlaceWord(word, slot) {
     return true; // Word can be placed
 }
 
-// Function to place a word in the puzzle
+// Function to place a wrd in the puzzle
 function placeWord(word, slot) {
     if (slot.direction === 'horizontal') {
         for (let i = 0; i < word.length; i++) {
