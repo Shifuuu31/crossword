@@ -65,6 +65,32 @@ function crosswordSolver(emptyPuzzle, words) {
     }
 }
 
+// Function to check if a word can fit in a slot
+function canPlaceWord(word, slot) {
+    if (word.length !== slot.length) return false; // Word must match the length of the slot
+
+    // Check horizontal placement
+    if (slot.direction === 'horizontal') {
+        for (let i = 0; i < word.length; i++) {
+            const cell = puzzle[slot.row][slot.col + i];
+            // Cell must be empty or match the letter in the word
+            if (cell === '.' || (cell !== '0' && cell !== '1' && cell !== '2' && cell !== word[i])) {
+                return false; // Can't place the word here
+            }
+        }
+    } else { // vertical placement
+        for (let i = 0; i < word.length; i++) {
+            const cell = puzzle[slot.row + i][slot.col];
+            // Cell must be empty or match the letter in the word
+            if (cell === '.' || (cell !== '0' && cell !== '1' && cell !== '2' && cell !== word[i])) {
+                return false; // Can't place the word here
+            }
+        }
+    }
+
+    return true; // Word can be placed
+}
+
 const emptyPuzzle = `2001
 0.30
 1000
