@@ -107,13 +107,30 @@ function placeWord(word, slot) {
 function removeWord(word, slot) {
     if (slot.direction === 'horizontal') {
         for (let i = 0; i < word.length; i++) {
-            puzzle[slot.row][slot.col + i] = '0'; /
+            puzzle[slot.row][slot.col + i] = '0';
         }
     } else { // vertical
         for (let i = 0; i < word.length; i++) {
             puzzle[slot.row + i][slot.col] = '0'; 
         }
     }
+}
+
+
+function backtrack(index) {
+    if (index === words.length) return true;
+
+    let word = words[index];
+
+    for (let slot of wordSlots) {
+        if (canPlaceWord(word, slot)) {
+            placeWord(word, slot);
+            if (backtrack(index + 1)) return true;
+            removeWord(word, slot);
+        }
+    }
+
+    return false;
 }
 
 const emptyPuzzle = `2001

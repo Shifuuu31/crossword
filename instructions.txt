@@ -1,0 +1,24 @@
+Global Instruction
+-parse input string puzzle
+-identify the positions where the words must be inserted
+-check if the provided list of words can fit into those positions (unique solution)
+
+Accurate Instruction
+
+-Parsing the puzzle:
+
+	The puzzle input is a string, so first we’ll convert it into a 2D array for easier manipulation.
+	Identify the positions where the words should go based on the numbers in the puzzle string.
+	
+-Fitting words:
+
+	We need to try to fit each word into the positions defined by the numbers in the puzzle.
+	Words must be placed in both horizontal and vertical directions, while ensuring no overlap conflicts.
+
+-Backtracking:
+
+	If a word doesn’t fit in a particular position, backtrack and try the next word in the list.
+
+-Error Handling:
+
+	If more than one solution is possible, or the puzzle and words don’t guarantee a unique solution, output Error.
