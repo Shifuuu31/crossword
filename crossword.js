@@ -65,54 +65,53 @@ function crosswordSolver(emptyPuzzle, words) {
     }
 }
 
-// Function to check if a word can fit in a slot
+
 function canPlaceWord(word, slot) {
-    if (word.length !== slot.length) return false; // Word must match the length of the slot
+    if (word.length !== slot.length) return false; 
 
     // Check horizontal placement
     if (slot.direction === 'horizontal') {
         for (let i = 0; i < word.length; i++) {
             const cell = puzzle[slot.row][slot.col + i];
-            // Cell must be empty or match the letter in the word
+          
             if (cell === '.' || (cell !== '0' && cell !== '1' && cell !== '2' && cell !== word[i])) {
-                return false; // Can't place the word here
+                return false;re
             }
         }
     } else { // vertical placement
         for (let i = 0; i < word.length; i++) {
             const cell = puzzle[slot.row + i][slot.col];
-            // Cell must be empty or match the letter in the word
             if (cell === '.' || (cell !== '0' && cell !== '1' && cell !== '2' && cell !== word[i])) {
-                return false; // Can't place the word here
+                return false; 
             }
         }
     }
 
-    return true; // Word can be placed
+    return true; 
 }
 
-// Function to place a wrd in the puzzle
+
 function placeWord(word, slot) {
     if (slot.direction === 'horizontal') {
         for (let i = 0; i < word.length; i++) {
-            puzzle[slot.row][slot.col + i] = word[i]; // Place each letter
+            puzzle[slot.row][slot.col + i] = word[i];
         }
     } else { // vertical
         for (let i = 0; i < word.length; i++) {
-            puzzle[slot.row + i][slot.col] = word[i]; // Place each letter
+            puzzle[slot.row + i][slot.col] = word[i];
         }
     }
 }
 
-// Function to remove the word (backtracking)
+
 function removeWord(word, slot) {
     if (slot.direction === 'horizontal') {
         for (let i = 0; i < word.length; i++) {
-            puzzle[slot.row][slot.col + i] = '0'; // Reset the cell to empty
+            puzzle[slot.row][slot.col + i] = '0'; /
         }
     } else { // vertical
         for (let i = 0; i < word.length; i++) {
-            puzzle[slot.row + i][slot.col] = '0'; // Reset the cell to empty
+            puzzle[slot.row + i][slot.col] = '0'; 
         }
     }
 }
