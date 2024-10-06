@@ -91,6 +91,32 @@ function canPlaceWord(word, slot) {
     return true; // Word can be placed
 }
 
+// Function to place a word in the puzzle
+function placeWord(word, slot) {
+    if (slot.direction === 'horizontal') {
+        for (let i = 0; i < word.length; i++) {
+            puzzle[slot.row][slot.col + i] = word[i]; // Place each letter
+        }
+    } else { // vertical
+        for (let i = 0; i < word.length; i++) {
+            puzzle[slot.row + i][slot.col] = word[i]; // Place each letter
+        }
+    }
+}
+
+// Function to remove the word (backtracking)
+function removeWord(word, slot) {
+    if (slot.direction === 'horizontal') {
+        for (let i = 0; i < word.length; i++) {
+            puzzle[slot.row][slot.col + i] = '0'; // Reset the cell to empty
+        }
+    } else { // vertical
+        for (let i = 0; i < word.length; i++) {
+            puzzle[slot.row + i][slot.col] = '0'; // Reset the cell to empty
+        }
+    }
+}
+
 const emptyPuzzle = `2001
 0.30
 1000
