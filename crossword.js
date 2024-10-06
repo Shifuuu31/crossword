@@ -25,6 +25,8 @@ function backtrackWords(index) {
 
 function crosswordSolver(emptyPuzzle, words) {
     parseMap(emptyPuzzle)
+    let original = puzzle
+    Object.freeze(original)
     let rows = puzzle.length;
     let cols = puzzle[0].length;
 
@@ -65,90 +67,109 @@ function crosswordSolver(emptyPuzzle, words) {
         }
     }
     // console.log(freeSlots)
-    // for (let i = 0; i < freeSlots.length; i++) {
-    //     console.log('slot['+i.toFixed()+']')
-    //     for (let j = 0; j < words.length; j++) {
-    //         console.log(canPutWord(words[j], freeSlots[i]))
-    //         }
 
-    // }
-
-    if (!backtrackWords(0)) {
-        console.error('Error: no solution finded')
-    } else {
-        printSolution(puzzle)
+    if (backtrackWords(0)) {
+        tmp = original
+        Object.freeze(tmp)
+        original = puzzle
+        Object.freeze
+        puzzle = tmp 
+        words = words.reverse()
+        if (backtrackWords(0)) {
+            if (original === puzzle) {
+                printSolution(original)
+                printSolution(puzzle)
+            }
+        }
     }
+        console.error('Error: no solution finded')
 }
 
 // -------------Parse the puzzle into a 2D array-------------
 // need's to be enhanced
+
 function parseMap(map) {
-    puzzle = map.split('\n').map(row => row.split(''))
+    if (typeof map !== 'string') {
+        console.error('Error: puzzle must be in string format')
+        process.exit(0)
+
+    }
+    puzzle = map.split('\n').map(row => row.split(''));
     let lineLenght = puzzle[0].length
 
     for (let i = 0; i < puzzle.length; i++) {
         for (let j = 0; j < puzzle[i].length; j++) {
+
+            ///////////  Check map size ///////////   
             if (lineLenght != puzzle[i].length) {
                 console.error('Error: Invalid map size')
-                process.exit(0)
+                process.exit(0);
             }
-            //check for 2 position
-            // if (puzzle[i][j] != '2' && ((i != 0 && j != 0 && puzzle[i][j - 1] == puzzle[i - 1][j] == '.') || (i == 0 && puzzle[i][j - 1] == '.') || (j == 0 && puzzle[i - 1][j] == '.'))) {
-            //     console.log('Error: Invalid element position \'' + puzzle[i][j] + '\'')
-            //     process.exit(0);
-            // }
 
-            //check for 1 position
-
+            ///////////  Check map element ///////////   
             if (puzzle[i][j] != '.'
                 && puzzle[i][j] != '0'
                 && puzzle[i][j] != '1'
                 && puzzle[i][j] != '2') {
-                // displayErr(emptyPuzzle, i, j) 
-                console.console('Error: invalid map element \'' + puzzle[i][j] + '\'')
-                process.exit(0)
+                console.error('Error: invalid map element \'' + puzzle[i][j] + '\'')
+                process.exit(0);
+
+            }
+            ///////////   Check 2 horizontal ///////////  
+            if (puzzle[i][j] == '2') {
+                for (let k = j + 1; k < puzzle.length - j; k++) {
+                    if (puzzle[i][k] == '.') {
+
+                        break
+                    }
+                    if (puzzle[i][k] == '2') {
+                        console.error('Error: Invalid horizontal \'2\' position')
+                        process.exit(0);
+                    }
+                }
+
+            }
+            ///////////  Check 2 vertical ///////////   
+            if (puzzle[i][j] == '2') {
+                for (let k = i + 1; k < puzzle.length - i; k++) {
+                    if (puzzle[k][j] == '.') {
+
+                        break
+                    }
+                    if (puzzle[k][j] == '2') {
+                        console.error('Error: Invalid vertical \'2\' position')
+                        process.exit(0);
+                    }
+                }
 
             }
         }
     }
+    ///////////  word duplicates ///////////  
+    if (checkDuplicates(words)) {
+        console.error('Error: Word Duplicates')
+        process.exit(0);
+    }
+
+}
+function checkDuplicates(arr) {
+    if (!Array.isArray(arr)) {
+        console.error('Error: words must be in a list of string (array)')
+        process.exit(0)
+    }
+    return new Set(arr).size !== arr.length
 }
 
 // -------------main entry-------------
 
-const emptyPuzzle = `...1...........
-..1000001000...
-...0....0......
-.1......0...1..
-.0....100000000
-100000..0...0..
-.0.....1001000.
-.0.1....0.0....
-.10000000.0....
-.0.0......0....
-.0.0.....100...
-...0......0....
-..........0....`
-const words = [
-    'sun',
-    'sunglasses',
-    'suncream',
-    'swimming',
-    'bikini',
-    'beach',
-    'icecream',
-    'tan',
-    'deckchair',
-    'sand',
-    'seaside',
-    'sandals',
-  ]
+const emptyPuzzle = '2000\n0...\n0...\n0...'
+let words = ['abba', 'assa']
 crosswordSolver(emptyPuzzle, words)
 
 
 // -------------func tools-------------
 
 function canPutWord(word, slot) {
-    // console.log("d")
     if (word.length !== slot.length) return false;
 
     if (slot.direction === 'H') {
